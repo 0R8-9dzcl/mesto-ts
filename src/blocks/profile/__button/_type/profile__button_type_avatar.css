@@ -1,18 +1,16 @@
-.profile__avatar-edit {
+.profile__button_type_avatar {
   border-radius: 50%;
   width: 120px;
   height: 120px;
-  border: none;
-  outline: none;
   padding: 0;
+  border: none;
   position: relative;
   justify-self: flex-start;
-  background-color: #000;
 }
 
-.profile__avatar-edit::before {
+.profile__button_type_avatar::before {
   content: '';
-  background-image: url(../../../images/logo-edit.svg);
+  background-image: url(../../../../images/logo-edit.svg);
   background-position: center;
   background-repeat: no-repeat;
   opacity: 0;
@@ -26,14 +24,14 @@
   border: none;
 }
 
-.profile__avatar-edit:hover::before {
+.profile__button_type_avatar:hover::before {
   opacity: 1;
   cursor: pointer;
 }
 
 
 @media screen and (max-width: 500px) {
-  .profile__avatar-edit {
+  .profile__button_type_avatar {
     margin: auto;
   }
 }
