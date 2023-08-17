@@ -7,8 +7,8 @@ class Popup {
 
   handleCloseByEvent = (event: MouseEvent | KeyboardEvent): void => {
     const targetElement = event.target
-    const isClickByCloseButton = targetElement instanceof Element && targetElement?.classList.contains('popup__close-button')
     const isClickOnPopup = targetElement === event.currentTarget
+    const isClickByCloseButton = targetElement instanceof Element && targetElement?.classList.contains('popup__close-button')
     const isEcapeKeyDownEvent = event instanceof KeyboardEvent && event?.key === 'Escape'
     if (isClickOnPopup || isClickByCloseButton || isEcapeKeyDownEvent) {
       this.close()
@@ -20,7 +20,6 @@ class Popup {
   }
 
   open = (): void => {
-    console.log(this.popupElement)
     this.popupElement?.classList.add('popup_opened')
     document.addEventListener('keydown', this.handleCloseByEvent)
   }
