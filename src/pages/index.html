@@ -16,18 +16,18 @@
   <main class="main">
     <section class="profile">
       <div class="profile__container">
-        <button class="profile__avatar-edit">
+        <button class="profile__button profile__button_type_avatar">
           <img class="profile__avatar" src="<%=require('../images/preloader.gif')%>" alt="аватарка пользлвателя">
         </button>
         <div class="profile__info">
           <div class="profile__user">
             <h1 class="profile__name">Данные</h1>
-            <button class="profile__edit-button" type="button"></button>
+            <button class="profile__button profile__button_type_user" type="button"></button>
           </div>
           <p class="profile__caption">загружаются...</p>
         </div>
       </div>
-      <button class="profile__add-button" type="button"></button>
+      <button class="profile__button profile__button_type_place" type="button"></button>
     </section>
     <section class="cards">
       <ul class="cards__list"></ul>
@@ -37,13 +37,13 @@
     <p class="footer__copy">&copy; 2023 Mesto Russia</p>
   </footer>
   <!-- pop-up -->
-  <div class="popup popup_upd-avatar">
-    <div class="popup__container">
+  <div class="popup popup_avatar">
+    <div class="popup__container popup__container_type_form">
       <button class="popup__close-button" type="button"></button>
       <form class="popup__form popup__form_action_avatar" name="updAvatar" novalidate>
         <h2 class="popup__title">Обновить аватар</h2>
         <input
-          class="popup__inputr"
+          class="popup__input"
           name="avatar"
           type="url"
           placeholder="Ссылка на картинку"
@@ -54,8 +54,8 @@
       </form>
     </div>
   </div>
-  <div class="popup popup_edit-profile">
-    <div class="popup__container">
+  <div class="popup popup_profile">
+    <div class="popup__container popup__container_type_form">
       <button class="popup__close-button" type="button"></button>
       <form class="popup__form popup__form_action_edit" name="editProfile" novalidate>
         <h2 class="popup__title">Редактировать профиль</h2>
@@ -110,7 +110,7 @@
       </form>
     </div>
   </div>
-  <div class="popup_photo popup">
+  <div class="popup_image popup">
     <div class="popup__container">
       <button class="popup__close-button" type="button"></button>
       <img class="popup__img" src="#" alt=" ">
@@ -118,7 +118,7 @@
     </div>
   </div>
   <div class="popup popup_delete">
-    <div class="popup__container">
+    <div class="popup__container popup__container_type_form">
       <button class="popup__close-button" type="button"></button>
       <form class="popup__form popup__form_action_delete" name="confirm" novalidate>
         <h2 class="popup__title">Вы уверены?</h2>
