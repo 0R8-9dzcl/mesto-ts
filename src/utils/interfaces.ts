@@ -1,7 +1,13 @@
-export interface IUser {
+export interface IProfile {
   name?: string
   avatar?: string
   about?: string
+}
+
+export interface IProfileSelectors {
+  nameSelector: string
+  avatarSelector: string
+  aboutSelector: string
 }
 
 export interface ISelectors {
