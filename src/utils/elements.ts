@@ -1,21 +1,21 @@
-import { type ButtonsObject, type StringObject as SelectorObject } from './types'
+import { type IUser, type ISelectors, type IOpenPopupButtons } from './interfaces'
 
-export const profileButtons: ButtonsObject = {
-  avatarButton: document.querySelector('.profile__button_type_avatar'),
-  profileEditButton: document.querySelector('.profile__button_type_user'),
-  addPlaceButton: document.querySelector('.profile__button_type_place')
+export const openPopupButtons: IOpenPopupButtons = {
+  avatarButton: document.querySelector('.profile__button_type_avatar') as HTMLButtonElement,
+  profileButton: document.querySelector('.profile__button_type_user') as HTMLButtonElement,
+  newPlaceButton: document.querySelector('.profile__button_type_place') as HTMLButtonElement
 }
 
-export const popupConfig: SelectorObject = {
+export const popupConfig: ISelectors = {
   avatarPopupSelector: '.popup_avatar',
-  profileEditPopupSelector: '.popup_profile',
-  addPlacePopupSelector: '.popup_place',
+  profilePopupSelector: '.popup_profile',
+  newPlacePopupSelector: '.popup_place',
   imagePopupSelector: '.popup_image',
   deletePopupSelector: '.popup_delete',
   openedPopupClass: 'popup_opened'
 }
 
-export const profileSelectors: SelectorObject = {
+export const profileSelectors: IUser = {
   avatar: '.profile__avatar',
   name: '.profile__name',
   about: 'profile__caption'
