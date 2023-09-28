@@ -1,7 +1,6 @@
-type ProfileButtons = Record<string, HTMLButtonElement | null>
-type SelectorObject = Record<string, string>
+import { type ButtonsObject, type StringObject as SelectorObject } from './types'
 
-export const profileButtons: ProfileButtons = {
+export const profileButtons: ButtonsObject = {
   avatarButton: document.querySelector('.profile__button_type_avatar'),
   profileEditButton: document.querySelector('.profile__button_type_user'),
   addPlaceButton: document.querySelector('.profile__button_type_place')
