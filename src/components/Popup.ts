@@ -1,11 +1,13 @@
-class Popup {
-  private readonly popupElement: HTMLElement | null
+abstract class Popup {
+  protected readonly popupElement: HTMLElement | null
 
   constructor (popupSelector: string) {
     this.popupElement = document.querySelector(popupSelector)
+    this.close = this.close.bind(this)
+    this.handleCloseByEvent = this.handleCloseByEvent.bind(this)
   }
 
-  handleCloseByEvent = (event: MouseEvent | KeyboardEvent): void => {
+  private handleCloseByEvent (event: MouseEvent | KeyboardEvent): void {
     const targetElement = event.target
     const isClickOnPopup = targetElement === event.currentTarget
     const isClickByCloseButton = targetElement instanceof Element && targetElement?.classList.contains('popup__close-button')
@@ -15,16 +17,16 @@ class Popup {
     }
   }
 
-  setClickListener = (): void => {
-    this.popupElement?.addEventListener('click', this.handleCloseByEvent)
+  setEventListeners (): void {
+    this.popupElement?.addEventListener('mousedown', this.handleCloseByEvent)
   }
 
-  open = (): void => {
+  open (): void {
     this.popupElement?.classList.add('popup_opened')
     document.addEventListener('keydown', this.handleCloseByEvent)
   }
 
-  close = (): void => {
+  protected close (): void {
     document.removeEventListener('keydown', this.handleCloseByEvent)
     this.popupElement?.classList.remove('popup_opened')
   }
