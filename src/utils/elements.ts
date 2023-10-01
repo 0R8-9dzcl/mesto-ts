@@ -1,4 +1,4 @@
-import { type IProfile, type ISelectors, type IOpenPopupButtons } from './interfaces'
+import { type ISelectors, type IOpenPopupButtons, type IProfileSelectors } from './interfaces'
 
 export const openPopupButtons: IOpenPopupButtons = {
   avatarButton: document.querySelector('.profile__button_type_avatar') as HTMLButtonElement,
@@ -15,8 +15,8 @@ export const popupConfig: ISelectors = {
   openedPopupClass: 'popup_opened'
 }
 
-export const profileSelectors: IProfile = {
-  avatar: '.profile__avatar',
-  name: '.profile__name',
-  about: 'profile__caption'
+export const profileSelectors: IProfileSelectors = {
+  avatarSelector: '.profile__avatar',
+  nameSelector: '.profile__name',
+  aboutSelector: '.profile__caption'
 }
