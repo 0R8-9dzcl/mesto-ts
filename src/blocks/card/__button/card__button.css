@@ -1,0 +1,8 @@
+.card__button {
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  height: 282px;
+}
