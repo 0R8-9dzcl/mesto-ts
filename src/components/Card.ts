@@ -3,13 +3,13 @@ import { type IPlace } from '../utils/interfaces'
 class Card {
   private readonly name: string
   private readonly link: string
-  private readonly handleImageClick: () => null
+  private readonly handleImageClick: (placeData: IPlace) => void
   private readonly placeElement: HTMLLIElement | null
   private readonly nameElement: HTMLHeadingElement | null
   private readonly imageElement: HTMLImageElement | null
   private readonly imageButtonElement: HTMLButtonElement | null
 
-  constructor (placeData: IPlace, cardTemplateSelector: string, handleImageClick: () => null) {
+  constructor (placeData: IPlace, cardTemplateSelector: string, handleImageClick: (placeData: IPlace) => void) {
     this.name = placeData.name ?? ''
     this.link = placeData.link ?? ''
     this.handleImageClick = handleImageClick

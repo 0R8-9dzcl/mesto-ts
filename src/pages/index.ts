@@ -5,6 +5,7 @@ import ProfileInfo from '../components/ProfileInfo'
 import { type IPlace, type IProfile } from '../utils/interfaces'
 import { type inputValues } from '../utils/types'
 import Card from '../components/Card'
+import PopupWithImage from '../components/PopupWithImage'
 
 const profile = new ProfileInfo(profileSelectors)
 const arr: IPlace[] = [
@@ -22,8 +23,15 @@ const arr: IPlace[] = [
   }
 ]
 
+const imagePopup = new PopupWithImage(popupConfig.imagePopupSelector)
+
+const handleImagePopupOpen = (placeData: IPlace): void => {
+  imagePopup.setImageData(placeData)
+  imagePopup.open()
+}
+
 const createPlace = (placeData: IPlace): HTMLLIElement => {
-  const newPlace = new Card(placeData, placeTemplateSelector, () => null).generatePlace()
+  const newPlace = new Card(placeData, placeTemplateSelector, handleImagePopupOpen).generatePlace()
   return newPlace
 }
 
@@ -64,6 +72,7 @@ const handleProfilePopupOpen = (): void => {
 avatarPopup.setEventListeners()
 newPlacePopup.setEventListeners()
 profilePopup.setEventListeners()
+imagePopup.setEventListeners()
 
 openPopupButtons.avatarButton?.addEventListener('click', handleAvatarPopupOpen)
 openPopupButtons.newPlaceButton?.addEventListener('click', handleNewPlacePopupOpen)
