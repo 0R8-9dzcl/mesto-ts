@@ -1,17 +1,48 @@
 import './index.css'
-import { popupConfig, openPopupButtons, profileSelectors } from '../utils/elements'
+import { popupConfig, openPopupButtons, profileSelectors, placeTemplateSelector } from '../utils/elements'
 import PopupWithForm from '../components/PopupWithForm'
 import ProfileInfo from '../components/ProfileInfo'
 import { type IPlace, type IProfile } from '../utils/interfaces'
 import { type inputValues } from '../utils/types'
+import Card from '../components/Card'
 
 const profile = new ProfileInfo(profileSelectors)
+const arr: IPlace[] = [
+  {
+    name: 'test',
+    link: 'sdfsdfsdfsd'
+  },
+  {
+    name: 'test',
+    link: 'sdfsdfsdfsd'
+  },
+  {
+    name: 'test',
+    link: 'sdfsdfsdfsd'
+  }
+]
+
+const createPlace = (placeData: IPlace): HTMLLIElement => {
+  const newPlace = new Card(placeData, placeTemplateSelector, () => null).generatePlace()
+  return newPlace
+}
+
+const placeContainer: HTMLUListElement | null = document.querySelector('.cards__list')
+arr.forEach(placeData => {
+  const newPlace = createPlace(placeData)
+  if (placeContainer != null) {
+    placeContainer.append(newPlace)
+  }
+})
 
 const handleProfileSubmit = (newProfileData: IProfile): void => {
   profile.setProfileInfo(newProfileData)
 }
 const handleNewPlaceSubmit = (newPlaceData: IPlace): void => {
-  console.log(newPlaceData)
+  const newPlace = createPlace(newPlaceData)
+  if (placeContainer != null) {
+    placeContainer.prepend(newPlace)
+  }
 }
 
 const avatarPopup = new PopupWithForm(popupConfig.avatarPopupSelector, handleProfileSubmit)

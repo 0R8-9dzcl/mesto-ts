@@ -20,3 +20,5 @@ export const profileSelectors: IProfileSelectors = {
   nameSelector: '.profile__name',
   aboutSelector: '.profile__caption'
 }
+
+export const placeTemplateSelector: string = '.template-card'
