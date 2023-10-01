@@ -4,6 +4,11 @@ export interface IProfile {
   about?: string
 }
 
+export interface IPlace {
+  name?: string
+  link?: string
+}
+
 export interface IProfileSelectors {
   nameSelector: string
   avatarSelector: string

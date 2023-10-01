@@ -1,15 +1,39 @@
 import './index.css'
-import { popupConfig, openPopupButtons } from '../utils/elements'
-import Popup from '../components/Popup'
+import { popupConfig, openPopupButtons, profileSelectors } from '../utils/elements'
+import PopupWithForm from '../components/PopupWithForm'
+import ProfileInfo from '../components/ProfileInfo'
+import { type IPlace, type IProfile } from '../utils/interfaces'
+import { type inputValues } from '../utils/types'
 
-const avatarPopup = new Popup(popupConfig.avatarPopupSelector)
-const newPlacePopup = new Popup(popupConfig.newPlacePopupSelector)
-const profilePopup = new Popup(popupConfig.profilePopupSelector)
+const profile = new ProfileInfo(profileSelectors)
 
-avatarPopup.setClickListener()
-newPlacePopup.setClickListener()
-profilePopup.setClickListener()
+const handleProfileSubmit = (newProfileData: IProfile): void => {
+  profile.setProfileInfo(newProfileData)
+}
+const handleNewPlaceSubmit = (newPlaceData: IPlace): void => {
+  console.log(newPlaceData)
+}
 
-openPopupButtons.avatarButton?.addEventListener('click', avatarPopup.open)
-openPopupButtons.newPlaceButton?.addEventListener('click', newPlacePopup.open)
-openPopupButtons.profileButton?.addEventListener('click', profilePopup.open)
+const avatarPopup = new PopupWithForm(popupConfig.avatarPopupSelector, handleProfileSubmit)
+const newPlacePopup = new PopupWithForm(popupConfig.newPlacePopupSelector, handleNewPlaceSubmit)
+const profilePopup = new PopupWithForm(popupConfig.profilePopupSelector, handleProfileSubmit)
+
+const handleAvatarPopupOpen = (): void => {
+  avatarPopup.open()
+}
+const handleNewPlacePopupOpen = (): void => {
+  newPlacePopup.open()
+}
+const handleProfilePopupOpen = (): void => {
+  const profileData = profile.getProfileInfo() as inputValues
+  profilePopup.setInputValues(profileData)
+  profilePopup.open()
+}
+
+avatarPopup.setEventListeners()
+newPlacePopup.setEventListeners()
+profilePopup.setEventListeners()
+
+openPopupButtons.avatarButton?.addEventListener('click', handleAvatarPopupOpen)
+openPopupButtons.newPlaceButton?.addEventListener('click', handleNewPlacePopupOpen)
+openPopupButtons.profileButton?.addEventListener('click', handleProfilePopupOpen)
