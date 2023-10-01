@@ -18,7 +18,6 @@ class PopupWithForm extends Popup {
   }
 
   setInputValues = (inputValues: inputValues): void => {
-    console.log(inputValues)
     this.inputList.forEach((input) => {
       console.log(input)
       input.value = inputValues[input.name]
