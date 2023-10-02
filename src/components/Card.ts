@@ -1,32 +1,32 @@
-import { type IPlace } from '../utils/interfaces'
+import { type ICard } from '../utils/interfaces'
 
 class Card {
   private readonly name: string
   private readonly link: string
-  private readonly handleImageClick: (placeData: IPlace) => void
-  private readonly placeElement: HTMLLIElement | null
+  private readonly handleImageClick: (cardData: ICard) => void
+  private readonly cardElement: HTMLLIElement | null
   private readonly nameElement: HTMLHeadingElement | null
   private readonly imageElement: HTMLImageElement | null
   private readonly imageButtonElement: HTMLButtonElement | null
   private readonly deleteButtonElement: HTMLButtonElement | null
 
-  constructor (placeData: IPlace, cardTemplateSelector: string, handleImageClick: (placeData: IPlace) => void) {
-    this.name = placeData.name ?? ''
-    this.link = placeData.link ?? ''
+  constructor (cardData: ICard, cardTemplateSelector: string, handleImageClick: (cardData: ICard) => void) {
+    this.name = cardData.name ?? ''
+    this.link = cardData.link ?? ''
     this.handleImageClick = handleImageClick
-    this.placeElement = this.getPlaceElement(cardTemplateSelector)
-    this.nameElement = this.placeElement?.querySelector('.card__title') as HTMLHeadingElement
-    this.imageElement = this.placeElement?.querySelector('.card__photo') as HTMLImageElement
-    this.imageButtonElement = this.placeElement?.querySelector('.card__button') as HTMLButtonElement
-    this.deleteButtonElement = this.placeElement?.querySelector('.card__delete') as HTMLButtonElement
+    this.cardElement = this.getPlaceElement(cardTemplateSelector)
+    this.nameElement = this.cardElement?.querySelector('.card__title') as HTMLHeadingElement
+    this.imageElement = this.cardElement?.querySelector('.card__photo') as HTMLImageElement
+    this.imageButtonElement = this.cardElement?.querySelector('.card__button') as HTMLButtonElement
+    this.deleteButtonElement = this.cardElement?.querySelector('.card__delete') as HTMLButtonElement
   }
 
   getPlaceElement = (selector: string): HTMLLIElement | null => {
-    const placeTemplate = document.querySelector(selector)
-    if (placeTemplate != null && placeTemplate instanceof HTMLTemplateElement) {
-      const templateContent = placeTemplate.content
-      const place = templateContent?.querySelector('.card')?.cloneNode(true)
-      return place as HTMLLIElement | null
+    const cardTemplate = document.querySelector(selector)
+    if (cardTemplate != null && cardTemplate instanceof HTMLTemplateElement) {
+      const templateContent = cardTemplate.content
+      const card = templateContent?.querySelector('.card')?.cloneNode(true)
+      return card as HTMLLIElement | null
     }
     return null
   }
@@ -37,7 +37,7 @@ class Card {
 
   private readonly onDeleteClick = (): void => {
     this.removeEventListeners()
-    this.placeElement?.remove()
+    this.cardElement?.remove()
   }
 
   private readonly setEventListeners = (): void => {
@@ -50,17 +50,21 @@ class Card {
     this.deleteButtonElement?.removeEventListener('click', this.onDeleteClick)
   }
 
-  generatePlace = (): HTMLLIElement => {
+  private readonly setCardData = (): void => {
     if (this.nameElement instanceof HTMLHeadingElement) {
       this.nameElement.textContent = this.name
     }
     if (this.imageElement instanceof HTMLImageElement) {
       this.imageElement.src = this.link
     }
+  }
+
+  generateCard = (): HTMLLIElement => {
+    this.setCardData()
 
     this.setEventListeners()
 
-    return this.placeElement as HTMLLIElement
+    return this.cardElement as HTMLLIElement
   }
 }
 
