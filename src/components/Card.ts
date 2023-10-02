@@ -22,7 +22,7 @@ class Card {
     this.deleteButtonElement = this.cardElement?.querySelector('.card__delete') as HTMLButtonElement
   }
 
-  getPlaceElement = (selector: string): HTMLLIElement | null => {
+  private readonly getPlaceElement = (selector: string): HTMLLIElement | null => {
     const cardTemplate = document.querySelector(selector)
     if (cardTemplate != null && cardTemplate instanceof HTMLTemplateElement) {
       const templateContent = cardTemplate.content
@@ -36,7 +36,7 @@ class Card {
     this.handleImageClick({ name: this.name, link: this.link })
   }
 
-  private readonly onDeleteClick = (): void => {
+  readonly onDeleteClick = (): void => {
     this.removeEventListeners()
     this.cardElement?.remove()
   }

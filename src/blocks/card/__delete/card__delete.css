@@ -13,10 +13,10 @@
   position: absolute;
   top: 17px;
   right: 13px;
-  filter: drop-shadow(2px 4px 6px #808080);
+  filter: drop-shadow(2px 4px 6px #1d1d1d);
 }
 
 .card__delete:hover {
   opacity: 0.6;
-  filter: drop-shadow(2px 4px 6px #000);
+  filter: drop-shadow(2px 4px 6px #2e2c2c);
 }
