@@ -4,7 +4,7 @@ export interface IProfile {
   about?: string
 }
 
-export interface IPlace {
+export interface ICard {
   name?: string
   link?: string
 }
