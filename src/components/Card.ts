@@ -1,8 +1,9 @@
 import { type ICard } from '../utils/interfaces'
+import imageNotFound from '../images/no-image.webp'
 
 class Card {
   private readonly name: string
-  private readonly link: string
+  private link: string
   private readonly handleImageClick: (cardData: ICard) => void
   private readonly cardElement: HTMLLIElement | null
   private readonly nameElement: HTMLHeadingElement | null
@@ -56,6 +57,13 @@ class Card {
     }
     if (this.imageElement instanceof HTMLImageElement) {
       this.imageElement.src = this.link
+
+      this.imageElement.onerror = (): void => {
+        if (this.imageElement instanceof HTMLImageElement) {
+          this.imageElement.src = imageNotFound
+          this.link = imageNotFound
+        }
+      }
     }
   }
 
