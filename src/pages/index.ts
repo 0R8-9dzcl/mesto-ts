@@ -20,6 +20,30 @@ const arr: ICard[] = [
   {
     name: 'test',
     link: 'sdfsdfsdfsd'
+  },
+  {
+    name: 'test',
+    link: 'sdfsdfsdfsd'
+  },
+  {
+    name: 'test',
+    link: 'sdfsdfsdfsd'
+  },
+  {
+    name: 'test',
+    link: 'sdfsdfsdfsd'
+  },
+  {
+    name: 'test',
+    link: 'sdfsdfsdfsd'
+  },
+  {
+    name: 'test',
+    link: 'sdfsdfsdfsd'
+  },
+  {
+    name: 'test',
+    link: 'sdfsdfsdfsd'
   }
 ]
 
@@ -30,16 +54,21 @@ const handleImagePopupOpen = (placeData: ICard): void => {
   imagePopup.open()
 }
 
-const createPlace = (placeData: ICard): HTMLLIElement => {
-  const newPlace = new Card(placeData, placeTemplateSelector, handleImagePopupOpen).generateCard()
+const createPlace = (placeData: ICard): Card => {
+  const newPlace = new Card(placeData, placeTemplateSelector, handleImagePopupOpen)
   return newPlace
 }
 
 const placeContainer: HTMLUListElement | null = document.querySelector('.cards__list')
-arr.forEach(placeData => {
+arr.forEach((placeData, index) => {
   const newPlace = createPlace(placeData)
+  const generatedPlace = newPlace.generateCard()
   if (placeContainer != null) {
-    placeContainer.append(newPlace)
+    const timer = setTimeout(() => {
+      placeContainer.append(generatedPlace)
+      newPlace.showCard()
+      clearTimeout(timer)
+    }, 300 * (index + 1))
   }
 })
 
@@ -48,8 +77,10 @@ const handleProfileSubmit = (newProfileData: IProfile): void => {
 }
 const handleNewPlaceSubmit = (newPlaceData: ICard): void => {
   const newPlace = createPlace(newPlaceData)
+  const generatedPlace = newPlace.generateCard()
   if (placeContainer != null) {
-    placeContainer.prepend(newPlace)
+    placeContainer.prepend(generatedPlace)
+    newPlace.showCard()
   }
 }
 

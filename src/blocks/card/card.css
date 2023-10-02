@@ -5,4 +5,14 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  visibility: hidden;
+  opacity: .3;
+  scale: 0;
+  transition: all .7s ease-in-out;
+}
+
+.card_visible {
+  visibility: visible;
+  opacity: 1;
+  scale: 1;
 }

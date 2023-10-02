@@ -37,8 +37,12 @@ class Card {
   }
 
   readonly onDeleteClick = (): void => {
+    this.hideCard()
     this.removeEventListeners()
-    this.cardElement?.remove()
+    const timer = setTimeout(() => {
+      this.cardElement?.remove()
+      clearTimeout(timer)
+    }, 700)
   }
 
   private readonly setEventListeners = (): void => {
@@ -65,6 +69,17 @@ class Card {
         }
       }
     }
+  }
+
+  readonly showCard = (): void => {
+    const timer = setTimeout(() => {
+      this.cardElement?.classList.add('card_visible')
+      clearTimeout(timer)
+    }, 300)
+  }
+
+  readonly hideCard = (): void => {
+    this.cardElement?.classList.remove('card_visible')
   }
 
   generateCard = (): HTMLLIElement => {
