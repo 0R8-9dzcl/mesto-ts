@@ -1,25 +1,49 @@
-import { type ICard } from '../utils/interfaces'
+import { type IProfile, type ICard, type INewCard, type ICardConfig } from '../utils/interfaces'
 import imageNotFound from '../images/no-image.webp'
 
 class Card {
   private readonly name: string
   private link: string
-  private readonly handleImageClick: (cardData: ICard) => void
+  private likes: IProfile[]
+  private readonly isOwner: boolean
+  private isLiked: boolean
+  private readonly userId: string
+
+  private readonly handleImageClick: (cardData: INewCard) => void
   private readonly cardElement: HTMLLIElement | null
   private readonly nameElement: HTMLHeadingElement | null
+  private readonly likesCounterElement: HTMLParagraphElement | null
   private readonly imageElement: HTMLImageElement | null
   private readonly imageButtonElement: HTMLButtonElement | null
+  private readonly likeButtonElement: HTMLButtonElement | null
   private readonly deleteButtonElement: HTMLButtonElement | null
+  private readonly likeActiveClass: string
 
-  constructor (cardData: ICard, cardTemplateSelector: string, handleImageClick: (cardData: ICard) => void) {
-    this.name = cardData.name ?? ''
-    this.link = cardData.link ?? ''
-    this.handleImageClick = handleImageClick
+  constructor (
+    cardData: ICard,
+    userId: string,
+    cardTemplateSelector: string,
+    handleImageClick: (cardData: INewCard) => void,
+    cardConfig: ICardConfig
+  ) {
+    this.name = cardData.name
+    this.link = cardData.link
+    this.likes = cardData.likes
+    this.isOwner = cardData.owner?._id === userId
+    this.userId = userId
+
     this.cardElement = this.getPlaceElement(cardTemplateSelector)
-    this.nameElement = this.cardElement?.querySelector('.card__title') as HTMLHeadingElement
-    this.imageElement = this.cardElement?.querySelector('.card__photo') as HTMLImageElement
-    this.imageButtonElement = this.cardElement?.querySelector('.card__button') as HTMLButtonElement
-    this.deleteButtonElement = this.cardElement?.querySelector('.card__delete') as HTMLButtonElement
+
+    this.handleImageClick = handleImageClick
+
+    this.nameElement = this.cardElement?.querySelector(cardConfig.titleSelector) as HTMLHeadingElement
+    this.imageElement = this.cardElement?.querySelector(cardConfig.imageSelector) as HTMLImageElement
+    this.imageButtonElement = this.cardElement?.querySelector(cardConfig.buttonSelector) as HTMLButtonElement
+    this.deleteButtonElement = this.cardElement?.querySelector(cardConfig.trashButtonSelector) as HTMLButtonElement
+    this.likeButtonElement = this.cardElement?.querySelector(cardConfig.likeSelector) as HTMLButtonElement
+    this.likesCounterElement = this.cardElement?.querySelector(cardConfig.likeCounterSelector) as HTMLParagraphElement
+    this.likeButtonElement = this.cardElement?.querySelector(cardConfig.likeSelector) as HTMLButtonElement
+    this.likeActiveClass = cardConfig.likeActiveClass
   }
 
   private readonly getPlaceElement = (selector: string): HTMLLIElement | null => {
@@ -30,6 +54,10 @@ class Card {
       return card as HTMLLIElement | null
     }
     return null
+  }
+
+  private readonly checkIsLiked = (): boolean => {
+    return this.likes.some(like => like._id === this.userId)
   }
 
   private readonly onImageClick = (): void => {
@@ -45,14 +73,35 @@ class Card {
     }, 700)
   }
 
+  readonly upadateLikes = (updatedLikes: IProfile[]): void => {
+    this.likes = updatedLikes
+    this.upadateLikesStatus()
+  }
+
+  private readonly upadateLikesStatus = (): void => {
+    this.isLiked = this.checkIsLiked()
+    if (this.likesCounterElement instanceof HTMLParagraphElement) {
+      this.likesCounterElement.textContent = this.likes.length.toString()
+    }
+    if (this.isLiked) {
+      this.likeButtonElement?.classList.add(this.likeActiveClass)
+    } else {
+      this.likeButtonElement?.classList.remove(this.likeActiveClass)
+    }
+  }
+
   private readonly setEventListeners = (): void => {
+    if (!this.isOwner) {
+      // не вешаю слушатель на удаление если карточка не моя
+      this.deleteButtonElement?.addEventListener('click', this.onDeleteClick)
+    }
     this.imageButtonElement?.addEventListener('click', this.onImageClick)
-    this.deleteButtonElement?.addEventListener('click', this.onDeleteClick)
   }
 
   private readonly removeEventListeners = (): void => {
-    this.imageButtonElement?.removeEventListener('click', this.onImageClick)
+    // слушатель на удаление без проверки на владельца, так как если я здесь, значит слушатель на удаление есть
     this.deleteButtonElement?.removeEventListener('click', this.onDeleteClick)
+    this.imageButtonElement?.removeEventListener('click', this.onImageClick)
   }
 
   private readonly setCardData = (): void => {
@@ -82,8 +131,16 @@ class Card {
     this.cardElement?.classList.remove('card_visible')
   }
 
+  private readonly removeDeleteCardButton = (): void => {
+    this.deleteButtonElement?.remove()
+  }
+
   generateCard = (): HTMLLIElement => {
     this.setCardData()
+    this.upadateLikesStatus()
+    if (!this.isOwner) {
+      this.removeDeleteCardButton()
+    }
 
     this.setEventListeners()
 

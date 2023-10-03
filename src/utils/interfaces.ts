@@ -5,12 +5,16 @@ export interface IProfile {
   _id?: string
 }
 
-export interface ICard {
+export interface INewCard {
   name?: string
   link?: string
-  likes?: IProfile[]
-  owner?: IProfile[]
-  _id?: string
+}
+export interface ICard {
+  name: string
+  link: string
+  likes: IProfile[]
+  owner: IProfile
+  _id: string
 }
 
 export interface IProfileSelectors {
@@ -26,6 +30,16 @@ export interface ISelectors {
   imagePopupSelector: string
   deletePopupSelector: string
   openedPopupClass: string
+}
+
+export interface ICardConfig {
+  titleSelector: string
+  imageSelector: string
+  buttonSelector: string
+  trashButtonSelector: string
+  likeSelector: string
+  likeCounterSelector: string
+  likeActiveClass: string
 }
 
 export interface IOpenPopupButtons {

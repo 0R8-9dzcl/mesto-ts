@@ -1,4 +1,4 @@
-import { type ICard } from '../utils/interfaces'
+import { type INewCard } from '../utils/interfaces'
 import Popup from './Popup'
 
 class PopupWithImage extends Popup {
@@ -11,7 +11,7 @@ class PopupWithImage extends Popup {
     this.popupCaptionElement = this.popupElement?.querySelector('.popup__img-caption') as HTMLParagraphElement
   }
 
-  setImageData = ({ name = '', link = '' }: ICard): void => {
+  setImageData = ({ name = '', link = '' }: INewCard): void => {
     if (this.popupImageElement instanceof HTMLImageElement && this.popupCaptionElement instanceof HTMLParagraphElement) {
       this.popupImageElement.src = link
       this.popupImageElement.alt = name
