@@ -6,46 +6,18 @@ import { type ICard, type IProfile } from '../utils/interfaces'
 import { type inputValues } from '../utils/types'
 import Card from '../components/Card'
 import PopupWithImage from '../components/PopupWithImage'
+import Api from '../components/Api'
 
 const profile = new ProfileInfo(profileSelectors)
-const arr: ICard[] = [
+
+const api = new Api(
+  'https://mesto.nomoreparties.co/v1/cohort-23',
+  // 'http://localhost:3333',
   {
-    name: 'test',
-    link: 'sdfsdfsdfsd'
-  },
-  {
-    name: 'test',
-    link: 'sdfsdfsdfsd'
-  },
-  {
-    name: 'test',
-    link: 'sdfsdfsdfsd'
-  },
-  {
-    name: 'test',
-    link: 'sdfsdfsdfsd'
-  },
-  {
-    name: 'test',
-    link: 'sdfsdfsdfsd'
-  },
-  {
-    name: 'test',
-    link: 'sdfsdfsdfsd'
-  },
-  {
-    name: 'test',
-    link: 'sdfsdfsdfsd'
-  },
-  {
-    name: 'test',
-    link: 'sdfsdfsdfsd'
-  },
-  {
-    name: 'test',
-    link: 'sdfsdfsdfsd'
+    'Content-Type': 'application/json; charset = utf-8',
+    authorization: '577b546f-6478-4029-92a1-5665bab78a44'
   }
-]
+)
 
 const imagePopup = new PopupWithImage(popupConfig.imagePopupSelector)
 
@@ -60,17 +32,27 @@ const createPlace = (placeData: ICard): Card => {
 }
 
 const placeContainer: HTMLUListElement | null = document.querySelector('.cards__list')
-arr.forEach((placeData, index) => {
-  const newPlace = createPlace(placeData)
-  const generatedPlace = newPlace.generateCard()
-  if (placeContainer != null) {
-    const timer = setTimeout(() => {
-      placeContainer.append(generatedPlace)
-      newPlace.showCard()
-      clearTimeout(timer)
-    }, 300 * (index + 1))
-  }
-})
+
+const renderCardList = (cards: ICard[]): void => {
+  cards.forEach((placeData, index) => {
+    const newPlace = createPlace(placeData)
+    const generatedPlace = newPlace.generateCard()
+    if (placeContainer != null) {
+      const timer = setTimeout(() => {
+        placeContainer.append(generatedPlace)
+        newPlace.showCard()
+        clearTimeout(timer)
+      }, 300 * (index + 1))
+    }
+  })
+}
+
+Promise.all([api.getAllCards(), api.getUserInfo()])
+  .then(([cards, userData]) => {
+    renderCardList(cards)
+    profile.setProfileInfo(userData)
+  })
+  .catch(console.log)
 
 const handleProfileSubmit = (newProfileData: IProfile): void => {
   profile.setProfileInfo(newProfileData)

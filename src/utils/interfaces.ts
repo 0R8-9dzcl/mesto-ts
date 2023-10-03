@@ -2,11 +2,15 @@ export interface IProfile {
   name?: string
   avatar?: string
   about?: string
+  _id?: string
 }
 
 export interface ICard {
   name?: string
   link?: string
+  likes?: IProfile[]
+  owner?: IProfile[]
+  _id?: string
 }
 
 export interface IProfileSelectors {
