@@ -53,7 +53,7 @@ class Api {
 
   deleteCard = async (id: string): Promise<ICard> => await this.fetcher(HttpMethod.DELETE, `/cards/${id}`)
 
-  changeLikeCardStatus = async (id: string, isLiked: boolean): Promise<any> => {
+  changeLikeCardStatus = async (id: string, isLiked: boolean): Promise<ICard> => {
     const fetchMethod: HttpMethod = isLiked ? HttpMethod.PUT : HttpMethod.DELETE
     return await this.fetcher(fetchMethod, `/cards/${id}/likes`)
   }
