@@ -1,12 +1,13 @@
 import './index.css'
-import { popupConfig, openPopupButtons, profileSelectors, placeTemplateSelector, cardSelectors } from '../utils/elements'
+import { popupConfig, openPopupButtons, profileSelectors, placeTemplateSelector, cardSelectors, placeContainerSelector } from '../utils/elements'
 import PopupWithForm from '../components/PopupWithForm'
 import ProfileInfo from '../components/ProfileInfo'
 import { type INewCard, type ICard, type IProfile } from '../utils/interfaces'
 import { type inputValues } from '../utils/types'
 import Card from '../components/Card'
 import PopupWithImage from '../components/PopupWithImage'
-import Api from '../components/Api'
+import Api from '../utils/Api'
+import Section from '../components/Section'
 
 // Использование функции handleFormSubmit для обновления аватара
 const handleAvatarSubmit = async (newProfileData: IProfile): Promise<any> => {
@@ -21,12 +22,8 @@ const handleProfileSubmit = async (newProfileData: IProfile): Promise<any> => {
 const handleNewPlaceSubmit = async (newPlaceData: INewCard): Promise<any> => {
   await api.addNewCard(newPlaceData as inputValues)
     .then((createPlaceData) => {
-      const newPlace = createPlace(createPlaceData)
-      const generatedPlace = newPlace.generateCard()
-      if (placeContainer != null) {
-        placeContainer.prepend(generatedPlace)
-        newPlace.showCard()
-      }
+      const newPlace = createPlace(createPlaceData, 1)
+      section.insertItem(newPlace)
     })
 }
 
@@ -52,7 +49,7 @@ const handleImagePopupOpen = (placeData: INewCard): void => {
   imagePopup.open()
 }
 
-const createPlace = (placeData: ICard): Card => {
+const createPlace = (placeData: ICard, delayMultiplier: number): HTMLLIElement => {
   const userId: string = profile.getId()
   const newPlace = new Card({
     cardData: placeData,
@@ -79,29 +76,16 @@ const createPlace = (placeData: ICard): Card => {
     },
     cardSelectors
   })
-  return newPlace
+  return newPlace.generateCard(delayMultiplier)
 }
 
-const placeContainer: HTMLUListElement | null = document.querySelector('.cards__list')
-
-const renderCardList = (cards: ICard[]): void => {
-  cards.forEach((placeData, index) => {
-    const newPlace = createPlace(placeData)
-    const generatedPlace = newPlace.generateCard()
-    if (placeContainer != null) {
-      const timer = setTimeout(() => {
-        placeContainer.append(generatedPlace)
-        newPlace.showCard()
-        clearTimeout(timer)
-      }, 300 * (index + 1))
-    }
-  })
-}
+const section = new Section<ICard>(placeContainerSelector, createPlace)
 
 Promise.all([api.getAllCards(), api.getUserInfo()])
   .then(([cards, userData]) => {
     profile.setProfileInfo(userData)
-    renderCardList(cards)
+
+    section.renderItems(cards)
   })
   .catch(console.log)
 

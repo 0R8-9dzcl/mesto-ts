@@ -138,14 +138,14 @@ class Card {
     }
   }
 
-  readonly showCard = (): void => {
+  readonly showCard = (delayMultiplier: number): void => {
     const timer = setTimeout(() => {
       this.cardElement?.classList.add('card_visible')
       clearTimeout(timer)
-    }, 300)
+    }, 310 * delayMultiplier)
   }
 
-  readonly hideCard = (): void => {
+  private readonly hideCard = (): void => {
     this.cardElement?.classList.remove('card_visible')
   }
 
@@ -153,7 +153,7 @@ class Card {
     this.deleteButtonElement?.remove()
   }
 
-  generateCard = (): HTMLLIElement => {
+  generateCard = (delayMultiplier: number): HTMLLIElement => {
     this.setCardData()
     this.upadateLikesStatus()
     if (!this.isOwner) {
@@ -161,6 +161,7 @@ class Card {
     }
 
     this.setEventListeners()
+    this.showCard(delayMultiplier)
 
     return this.cardElement as HTMLLIElement
   }

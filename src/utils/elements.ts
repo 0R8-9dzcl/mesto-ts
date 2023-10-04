@@ -31,3 +31,4 @@ export const profileSelectors: IProfileSelectors = {
 }
 
 export const placeTemplateSelector: string = '.template-card'
+export const placeContainerSelector: string = '.cards__list'
