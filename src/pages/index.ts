@@ -8,7 +8,33 @@ import Card from '../components/Card'
 import PopupWithImage from '../components/PopupWithImage'
 import Api from '../components/Api'
 
+// Использование функции handleFormSubmit для обновления аватара
+const handleAvatarSubmit = async (newProfileData: IProfile): Promise<any> => {
+  return await handleUpdateProfileSubmit(newProfileData, api.updateUserAvatar)
+}
+
+// Использование функции handleFormSubmit для обновления информации профиля
+const handleProfileSubmit = async (newProfileData: IProfile): Promise<any> => {
+  return await handleUpdateProfileSubmit(newProfileData, api.updateUserInfo)
+}
+
+const handleNewPlaceSubmit = async (newPlaceData: INewCard): Promise<any> => {
+  await api.addNewCard(newPlaceData as inputValues)
+    .then((createPlaceData) => {
+      const newPlace = createPlace(createPlaceData)
+      const generatedPlace = newPlace.generateCard()
+      if (placeContainer != null) {
+        placeContainer.prepend(generatedPlace)
+        newPlace.showCard()
+      }
+    })
+}
+
 const profile = new ProfileInfo(profileSelectors)
+const avatarPopup = new PopupWithForm(popupConfig.avatarPopupSelector, 'Сохранение', handleAvatarSubmit)
+const newPlacePopup = new PopupWithForm(popupConfig.newPlacePopupSelector, 'Создание', handleNewPlaceSubmit)
+const profilePopup = new PopupWithForm(popupConfig.profilePopupSelector, 'Сохранение', handleProfileSubmit)
+const deletePopup = new PopupWithForm(popupConfig.deletePopupSelector, 'Удаление', async (): Promise<any> => {})
 
 const api = new Api(
   'https://mesto.nomoreparties.co/v1/cohort-23',
@@ -41,11 +67,15 @@ const createPlace = (placeData: ICard): Card => {
         .catch(console.log)
     },
     handleDeleteClick: (cardId: string): void => {
-      api.deleteCard(cardId)
-        .then((card) => {
-          newPlace.deleteCard()
-        })
-        .catch(console.log)
+      const deleteCallback = async (): Promise<any> => {
+        await api.deleteCard(cardId)
+          .then((card) => {
+            newPlace.deleteCard()
+          })
+          .catch(console.log)
+      }
+      deletePopup.resetSubmitCallback(deleteCallback)
+      deletePopup.open()
     },
     cardSelectors
   })
@@ -83,32 +113,6 @@ const handleUpdateProfileSubmit = async (newProfileData: IProfile, updateFunctio
     .catch(console.log)
 }
 
-// Использование функции handleFormSubmit для обновления аватара
-const handleAvatarSubmit = async (newProfileData: IProfile): Promise<any> => {
-  return await handleUpdateProfileSubmit(newProfileData, api.updateUserAvatar)
-}
-
-// Использование функции handleFormSubmit для обновления информации профиля
-const handleProfileSubmit = async (newProfileData: IProfile): Promise<any> => {
-  return await handleUpdateProfileSubmit(newProfileData, api.updateUserInfo)
-}
-
-const handleNewPlaceSubmit = async (newPlaceData: INewCard): Promise<any> => {
-  await api.addNewCard(newPlaceData as inputValues)
-    .then((createPlaceData) => {
-      const newPlace = createPlace(createPlaceData)
-      const generatedPlace = newPlace.generateCard()
-      if (placeContainer != null) {
-        placeContainer.prepend(generatedPlace)
-        newPlace.showCard()
-      }
-    })
-}
-
-const avatarPopup = new PopupWithForm(popupConfig.avatarPopupSelector, 'Сохранение', handleAvatarSubmit)
-const newPlacePopup = new PopupWithForm(popupConfig.newPlacePopupSelector, 'Создание', handleNewPlaceSubmit)
-const profilePopup = new PopupWithForm(popupConfig.profilePopupSelector, 'Сохранение', handleProfileSubmit)
-
 const handleAvatarPopupOpen = (): void => {
   avatarPopup.open()
 }
@@ -125,6 +129,7 @@ avatarPopup.setEventListeners()
 newPlacePopup.setEventListeners()
 profilePopup.setEventListeners()
 imagePopup.setEventListeners()
+deletePopup.setEventListeners()
 
 openPopupButtons.avatarButton?.addEventListener('click', handleAvatarPopupOpen)
 openPopupButtons.newPlaceButton?.addEventListener('click', handleNewPlacePopupOpen)
