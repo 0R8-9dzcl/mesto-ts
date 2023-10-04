@@ -1,4 +1,4 @@
-import { type ISelectors, type IOpenPopupButtons, type IProfileSelectors, type ICardConfig } from './interfaces'
+import { type ISelectors, type IOpenPopupButtons, type IProfileSelectors, type ICardSelectors } from './interfaces'
 
 export const openPopupButtons: IOpenPopupButtons = {
   avatarButton: document.querySelector('.profile__button_type_avatar') as HTMLButtonElement,
@@ -15,7 +15,7 @@ export const popupConfig: ISelectors = {
   openedPopupClass: 'popup_opened'
 }
 // Параметры карточек
-export const cardConfig: ICardConfig = {
+export const cardSelectors: ICardSelectors = {
   titleSelector: '.card__title',
   imageSelector: '.card__photo',
   buttonSelector: '.card__button',

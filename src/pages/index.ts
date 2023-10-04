@@ -1,5 +1,5 @@
 import './index.css'
-import { popupConfig, openPopupButtons, profileSelectors, placeTemplateSelector, cardConfig } from '../utils/elements'
+import { popupConfig, openPopupButtons, profileSelectors, placeTemplateSelector, cardSelectors } from '../utils/elements'
 import PopupWithForm from '../components/PopupWithForm'
 import ProfileInfo from '../components/ProfileInfo'
 import { type INewCard, type ICard, type IProfile } from '../utils/interfaces'
@@ -27,8 +27,28 @@ const handleImagePopupOpen = (placeData: INewCard): void => {
 }
 
 const createPlace = (placeData: ICard): Card => {
-  const id: string = profile.getId()
-  const newPlace = new Card(placeData, id, placeTemplateSelector, handleImagePopupOpen, cardConfig)
+  const userId: string = profile.getId()
+  const newPlace = new Card({
+    cardData: placeData,
+    userId,
+    cardTemplateSelector: placeTemplateSelector,
+    handleImageClick: handleImagePopupOpen,
+    handleLikeClick: (cardId: string, isLiked: boolean): void => {
+      api.changeLikeCardStatus(cardId, isLiked)
+        .then((updatedCard: ICard) => {
+          newPlace.upadateLikes(updatedCard.likes)
+        })
+        .catch(console.log)
+    },
+    handleDeleteClick: (cardId: string): void => {
+      api.deleteCard(cardId)
+        .then((card) => {
+          newPlace.deleteCard()
+        })
+        .catch(console.log)
+    },
+    cardSelectors
+  })
   return newPlace
 }
 

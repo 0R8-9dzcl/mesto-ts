@@ -32,7 +32,7 @@ export interface ISelectors {
   openedPopupClass: string
 }
 
-export interface ICardConfig {
+export interface ICardSelectors {
   titleSelector: string
   imageSelector: string
   buttonSelector: string
@@ -40,6 +40,15 @@ export interface ICardConfig {
   likeSelector: string
   likeCounterSelector: string
   likeActiveClass: string
+}
+export interface ICardConfig {
+  cardData: ICard
+  userId: string
+  cardTemplateSelector: string
+  handleImageClick: (cardData: INewCard) => void
+  handleLikeClick: (cardId: string, isLiked: boolean) => void
+  handleDeleteClick: (cardId: string) => void
+  cardSelectors: ICardSelectors
 }
 
 export interface IOpenPopupButtons {
