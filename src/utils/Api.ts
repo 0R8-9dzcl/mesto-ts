@@ -1,6 +1,6 @@
-import { HttpMethod } from '../utils/enums'
-import { type ICard, type IProfile } from '../utils/interfaces'
-import { type inputValues } from '../utils/types'
+import { HttpMethod } from './enums'
+import { type ICard, type IProfile } from './interfaces'
+import { type inputValues } from './types'
 
 class Api {
   private readonly url: string
