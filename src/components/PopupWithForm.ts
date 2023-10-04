@@ -4,22 +4,38 @@ import Popup from './Popup'
 class PopupWithForm extends Popup {
   private readonly formElement: HTMLFormElement | null
   private readonly inputList: HTMLInputElement[]
-  private submitCallback: (inputData: inputValues) => void
+  private readonly initSubmitText: string
+  private readonly loadingSubmitText: string
+  private readonly submitButtonElement: HTMLButtonElement
+  private isLoading: boolean
 
-  constructor (popupSelector: string, submitCallback: (inputData: inputValues) => void) {
+  private submitCallback: (inputData: inputValues) => Promise<any>
+
+  constructor (
+    popupSelector: string,
+    loadingSubmitText: string,
+    submitCallback: (inputData: inputValues) => Promise<any>
+  ) {
     super(popupSelector)
     this.formElement = this.popupElement?.querySelector('.popup__form') as HTMLFormElement
     this.inputList = Array.from(this.formElement?.querySelectorAll('.popup__input '))
+    this.submitButtonElement = this.popupElement?.querySelector('.popup__submit') as HTMLButtonElement
+
+    if (typeof this.submitButtonElement.textContent === 'string') {
+      this.initSubmitText = this.submitButtonElement.textContent
+      this.loadingSubmitText = loadingSubmitText
+    }
+
     this.submitCallback = submitCallback
+    this.isLoading = false
   }
 
-  resetSubmitCallback = (newCallback: () => void): void => {
+  resetSubmitCallback = (newCallback: () => Promise<any>): void => {
     this.submitCallback = newCallback
   }
 
   setInputValues = (inputValues: inputValues): void => {
     this.inputList.forEach((input) => {
-      console.log(input)
       input.value = inputValues[input.name]
     })
   }
@@ -32,10 +48,30 @@ class PopupWithForm extends Popup {
     return inputValues
   }
 
+  private readonly setSubmitButtonState = (state: string): void => {
+    this.submitButtonElement.textContent = state
+    this.submitButtonElement.disabled = this.isLoading
+  }
+
+  private readonly setIsLoading = (state: boolean): void => {
+    this.isLoading = state
+    if (this.isLoading) {
+      this.setSubmitButtonState(this.loadingSubmitText)
+    } else {
+      this.setSubmitButtonState(this.initSubmitText)
+    }
+  }
+
   private readonly handleSubmit = (event: Event): void => {
     event.preventDefault()
+    this.setIsLoading(true)
     this.submitCallback(this.getInputValues())
-    this.close()
+      .then(() => {
+        this.close()
+      })
+      .finally(() => {
+        this.setIsLoading(false)
+      })
   }
 
   setEventListeners = (): void => {

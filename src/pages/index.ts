@@ -50,26 +50,44 @@ const renderCardList = (cards: ICard[]): void => {
 
 Promise.all([api.getAllCards(), api.getUserInfo()])
   .then(([cards, userData]) => {
-    renderCardList(cards)
     profile.setProfileInfo(userData)
+    renderCardList(cards)
   })
   .catch(console.log)
 
-const handleProfileSubmit = (newProfileData: IProfile): void => {
-  profile.setProfileInfo(newProfileData)
-}
-const handleNewPlaceSubmit = (newPlaceData: INewCard): void => {
-  // const newPlace = createPlace(newPlaceData)
-  // const generatedPlace = newPlace.generateCard()
-  // if (placeContainer != null) {
-  //   placeContainer.prepend(generatedPlace)
-  //   newPlace.showCard()
-  // }
+const handleUpdateProfileSubmit = async (newProfileData: IProfile, updateFunction: (newProfileData: IProfile) => Promise<IProfile>): Promise<any> => {
+  await updateFunction(newProfileData)
+    .then(updatedProfileData => {
+      profile.setProfileInfo(updatedProfileData)
+    })
+    .catch(console.log)
 }
 
-const avatarPopup = new PopupWithForm(popupConfig.avatarPopupSelector, handleProfileSubmit)
-const newPlacePopup = new PopupWithForm(popupConfig.newPlacePopupSelector, handleNewPlaceSubmit)
-const profilePopup = new PopupWithForm(popupConfig.profilePopupSelector, handleProfileSubmit)
+// Использование функции handleFormSubmit для обновления аватара
+const handleAvatarSubmit = async (newProfileData: IProfile): Promise<any> => {
+  return await handleUpdateProfileSubmit(newProfileData, api.updateUserAvatar)
+}
+
+// Использование функции handleFormSubmit для обновления информации профиля
+const handleProfileSubmit = async (newProfileData: IProfile): Promise<any> => {
+  return await handleUpdateProfileSubmit(newProfileData, api.updateUserInfo)
+}
+
+const handleNewPlaceSubmit = async (newPlaceData: INewCard): Promise<any> => {
+  await api.addNewCard(newPlaceData as inputValues)
+    .then((createPlaceData) => {
+      const newPlace = createPlace(createPlaceData)
+      const generatedPlace = newPlace.generateCard()
+      if (placeContainer != null) {
+        placeContainer.prepend(generatedPlace)
+        newPlace.showCard()
+      }
+    })
+}
+
+const avatarPopup = new PopupWithForm(popupConfig.avatarPopupSelector, 'Сохранение', handleAvatarSubmit)
+const newPlacePopup = new PopupWithForm(popupConfig.newPlacePopupSelector, 'Создание', handleNewPlaceSubmit)
+const profilePopup = new PopupWithForm(popupConfig.profilePopupSelector, 'Сохранение', handleProfileSubmit)
 
 const handleAvatarPopupOpen = (): void => {
   avatarPopup.open()
