@@ -68,6 +68,7 @@ class PopupWithForm extends Popup {
     this.submitCallback(this.getInputValues())
       .then(() => {
         this.close()
+        this.formElement?.reset()
       })
       .finally(() => {
         this.setIsLoading(false)
