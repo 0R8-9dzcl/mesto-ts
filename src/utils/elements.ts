@@ -1,4 +1,4 @@
-import { type ISelectors, type IOpenPopupButtons, type IProfileSelectors } from './interfaces'
+import { type ISelectors, type IOpenPopupButtons, type IProfileSelectors, type ICardSelectors } from './interfaces'
 
 export const openPopupButtons: IOpenPopupButtons = {
   avatarButton: document.querySelector('.profile__button_type_avatar') as HTMLButtonElement,
@@ -14,7 +14,16 @@ export const popupConfig: ISelectors = {
   deletePopupSelector: '.popup_delete',
   openedPopupClass: 'popup_opened'
 }
-
+// Параметры карточек
+export const cardSelectors: ICardSelectors = {
+  titleSelector: '.card__title',
+  imageSelector: '.card__photo',
+  buttonSelector: '.card__button',
+  trashButtonSelector: '.card__delete',
+  likeCounterSelector: '.card__like-counter',
+  likeSelector: '.card__like',
+  likeActiveClass: 'card__like_active'
+}
 export const profileSelectors: IProfileSelectors = {
   avatarSelector: '.profile__avatar',
   nameSelector: '.profile__name',
@@ -22,3 +31,4 @@ export const profileSelectors: IProfileSelectors = {
 }
 
 export const placeTemplateSelector: string = '.template-card'
+export const placeContainerSelector: string = '.cards__list'

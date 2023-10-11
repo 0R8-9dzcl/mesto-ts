@@ -2,11 +2,19 @@ export interface IProfile {
   name?: string
   avatar?: string
   about?: string
+  _id?: string
 }
 
-export interface ICard {
+export interface INewCard {
   name?: string
   link?: string
+}
+export interface ICard {
+  name: string
+  link: string
+  likes: IProfile[]
+  owner: IProfile
+  _id: string
 }
 
 export interface IProfileSelectors {
@@ -22,6 +30,25 @@ export interface ISelectors {
   imagePopupSelector: string
   deletePopupSelector: string
   openedPopupClass: string
+}
+
+export interface ICardSelectors {
+  titleSelector: string
+  imageSelector: string
+  buttonSelector: string
+  trashButtonSelector: string
+  likeSelector: string
+  likeCounterSelector: string
+  likeActiveClass: string
+}
+export interface ICardConfig {
+  cardData: ICard
+  userId: string
+  cardTemplateSelector: string
+  handleImageClick: (cardData: INewCard) => void
+  handleLikeClick: (cardId: string, isLiked: boolean) => void
+  handleDeleteClick: (cardId: string) => void
+  cardSelectors: ICardSelectors
 }
 
 export interface IOpenPopupButtons {

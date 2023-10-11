@@ -4,6 +4,7 @@ class ProfileInfo {
   private readonly aboutElement: HTMLParagraphElement | null
   private readonly avatarElement: HTMLImageElement | null
   private readonly nameElement: HTMLHeadingElement | null
+  private profileId: string
 
   constructor ({ nameSelector, avatarSelector, aboutSelector }: IProfileSelectors) {
     this.aboutElement = document.querySelector(aboutSelector)
@@ -19,7 +20,9 @@ class ProfileInfo {
     }
   }
 
-  setProfileInfo = ({ name = '', about = '', avatar = '' }: IProfile): void => {
+  getId = (): string => this.profileId
+
+  setProfileInfo = ({ name = '', about = '', avatar = '', _id = '' }: IProfile): void => {
     if (this.aboutElement instanceof HTMLParagraphElement && about.length > 0) {
       this.aboutElement.textContent = about
     }
@@ -29,6 +32,7 @@ class ProfileInfo {
     if (this.nameElement instanceof HTMLHeadingElement && name.length > 0) {
       this.nameElement.textContent = name
     }
+    this.profileId = _id
   }
 }
 
